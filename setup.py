@@ -18,14 +18,14 @@ def get_requirements(filename='requirements.txt') -> List[str]:
 
 
 setup(
-    name='red_wine_quality_prediction',
+    name='Customer Churn Prediction',
     version='0.1.0',
     author='Mayukh',
     author_email='mayukhbaeuah91@gmail.com',
-    description='is projrct is about predicting the quality of red wine using machine learning techniques.',
+    description='A package for predicting customer churn using machine learning.',
     long_description=open('README.md').read(),
     long_description_content_type='text/markdown',
-    url='https://github.com/MayukhBaruah19/Red-wine-quality-prediction',
+    url='https://github.com/MayukhBaruah19/Customer-churn-prediction',
     packages=find_packages(),
     install_requires=get_requirements()  # Automatically finds all sub-packages
 )
