@@ -12,10 +12,11 @@ from sklearn.compose import ColumnTransformer
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler, LabelEncoder, OneHotEncoder
 from sklearn.impute import SimpleImputer
+from imblearn.over_sampling import SMOTE
 
 from src.logger import logging
 from src.exception import CustomException
-from src.utils import save_object
+from src.utils import save_object,handle_imbalanced_data
 
 
 
@@ -87,12 +88,10 @@ class DataTransformation:
 
             logging.info('Obtaining preprocessing object')
 
-            # target_column_name = 'Churn'
 
             preprocessor_obj=self.get_data_transformer_object()
 
             target_column_name='Churn'
-            # numerical_columns=['SeniorCitizen', 'tenure', 'MonthlyCharges']
 
             input_feature_train_df=train_df.drop(columns=[target_column_name], axis=1)
             target_feature_train_df=train_df[target_column_name]
@@ -106,15 +105,19 @@ class DataTransformation:
             target_feature_test_df = label_encoder.transform(target_feature_test_df)
 
             logging.info('applying label encoding on target column both train and test data')
-
-
+            
+            
             # Transforming the input features
             input_feature_train_arr=preprocessor_obj.fit_transform(input_feature_train_df)
             input_feature_test_arr=preprocessor_obj.transform(input_feature_test_df)
             
             logging.info('Applying preprocessing object on input columns of training  and test data ')
+            
+            #Applying SMOTE
+            somte=SMOTE(random_state=42)
+            input_feature_train_resampled,target_feature_train_resampled=somte.fit_resample(input_feature_train_arr,target_feature_train_df)
 
-            train_arr = np.c_[input_feature_train_arr, np.array(target_feature_train_df)]
+            train_arr = np.c_[input_feature_train_resampled, np.array(target_feature_train_resampled)]
             test_arr = np.c_[input_feature_test_arr, np.array(target_feature_test_df)]
 
             logging.info(f'saving preprocessing,and label encoder object')

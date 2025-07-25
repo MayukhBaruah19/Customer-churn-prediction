@@ -5,8 +5,9 @@ matplotlib==3.10.3
 scikit-learn==1.6.1
 fastapi
 uvicorn
-imbalanced-learn
 xgboost
 dill
-# XGBClassifier
+xgboost
+catboost
+imbalanced-learn
 # -e .

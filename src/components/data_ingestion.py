@@ -14,6 +14,8 @@ from src.exception import CustomException
 from src.logger import logging
 from src.components.data_transformation import DataTransformation
 from src.components.data_transformation import DataTransformationConfig
+from src.components.model_trainer import ModelTrannerConfig
+from src.components.model_trainer import ModelTrainer
 
 
 # Inputs that are required for data ingestion is present in this class and
@@ -68,13 +70,27 @@ class DataIngestion:
 
 
 if __name__ == "__main__":
-    obj = DataIngestion()
-    train_data, test_data = obj.initiate_data_ingestion()
+    try:
+        # Step 1: Data Ingestion
+        obj = DataIngestion()
+        train_data, test_data = obj.initiate_data_ingestion()
 
-    data_transformation = DataTransformation()
-    data_transformation.initiate_data_transformation(train_data, test_data)
+        # Step 2: Data Transformation
+        data_transformation = DataTransformation()
+        train_arr, test_arr, _ = data_transformation.initiate_data_transformation(train_data, test_data)
+
+        # Step 3: Model Training
+        model_trainer = ModelTrainer()
+        accuracy, report = model_trainer.initiate_model_trainer(train_arr, test_arr)
+
+        # Final Output
+        print("\nFinal Model Evaluation:")
+        print(f"Accuracy: {accuracy:.4f}")
+        print("Classification Report:")
+        print(report)
+
+    except Exception as e:
+        print(f"Pipeline failed due to: {e}")    
 
 
-# if __name__=="__main__":
-#     obj=DataIngestion()
-#     obj.initiate_data_ingestion()
+
