@@ -1,6 +1,6 @@
 '''
 The main aim of the data_ingestion file is to read the data from some specific data source
-(Like mongoDB,and other cloud storage etc) and split the data and then data_transformation will happend.
+(Like mongoDB,and other cloud storage etc) and split the data into train and test and then data_transformation will happend.
 '''
 
 import os
@@ -33,8 +33,9 @@ class DataIngestion:
         self.ingestion_config = DataIngestionConfig()
 
     # if my data is present in some database  to read the data from a
+    # Database, we will write that code in this function.
     def initiate_data_ingestion(self):
-        # Database, we will write that code in this function.
+        
         logging.info("Entered the data ingestion method or component")
 
         try:
@@ -77,7 +78,7 @@ if __name__ == "__main__":
 
         # Step 2: Data Transformation
         data_transformation = DataTransformation()
-        train_arr, test_arr, _ = data_transformation.initiate_data_transformation(train_data, test_data)
+        train_arr, test_arr, preprocessor_path,label_encoder_path  = data_transformation.initiate_data_transformation(train_data, test_data)
 
         # Step 3: Model Training
         model_trainer = ModelTrainer()
@@ -92,5 +93,6 @@ if __name__ == "__main__":
     except Exception as e:
         print(f"Pipeline failed due to: {e}")    
 
+        
 
 

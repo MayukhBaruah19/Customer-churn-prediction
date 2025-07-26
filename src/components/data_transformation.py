@@ -1,5 +1,7 @@
 '''
-The main aim of the data_transformation file is to transform the data into a format suitable for model training, such as encoding categorical variables, scaling numerical features, and handling missing values,etc
+The main aim of the data_transformation file is to transform the data into a format suitable 
+for model training, such as encoding categorical variables, scaling numerical features, 
+and handling missing values,etc
 '''
 
 import os
@@ -12,7 +14,7 @@ from sklearn.compose import ColumnTransformer
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler, LabelEncoder, OneHotEncoder
 from sklearn.impute import SimpleImputer
-from imblearn.over_sampling import SMOTE
+from imblearn.over_sampling import SMOTE #for handeling Imalanced data
 
 from src.logger import logging
 from src.exception import CustomException
@@ -34,7 +36,7 @@ class DataTransformation:
 
     def get_data_transformer_object(self):
         '''
-        This function is responsible for creating a data transformation pipeline.for numerical and categorical features.
+        This function is responsible for creating a data transformation pipeline, for numerical and categorical features.
         It handles missing values, scales numerical features, encodes categorical features, and prepares the data
         '''
         try:
@@ -114,8 +116,11 @@ class DataTransformation:
             logging.info('Applying preprocessing object on input columns of training  and test data ')
             
             #Applying SMOTE
-            somte=SMOTE(random_state=42)
-            input_feature_train_resampled,target_feature_train_resampled=somte.fit_resample(input_feature_train_arr,target_feature_train_df)
+            input_feature_train_resampled, target_feature_train_resampled = handle_imbalanced_data(
+            input_feature_train_arr,
+            target_feature_train_df
+            )
+            
 
             train_arr = np.c_[input_feature_train_resampled, np.array(target_feature_train_resampled)]
             test_arr = np.c_[input_feature_test_arr, np.array(target_feature_test_df)]
@@ -136,10 +141,13 @@ class DataTransformation:
                 train_arr,
                 test_arr,
                 self.data_transformation_config.preprocessor_obj_file_path,
+                self.data_transformation_config.label_encoder_obj_file_path,
+                
 
             )
 
         except Exception as e:
             raise CustomException(e, sys)
             
+
 

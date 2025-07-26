@@ -36,6 +36,7 @@ def handle_imbalanced_data(X_train, y_train):
         logging.error("Error while applying SMOTE", exc_info=True)
         raise CustomException(e, sys)
     
+
 def evaluate_models(X_train,y_train,X_test,y_test,models):
         try:
             report={}
@@ -53,11 +54,11 @@ def evaluate_models(X_train,y_train,X_test,y_test,models):
                 train_cls_report=classification_report(y_train,y_train_pred)
                 test_cls_report=classification_report(y_test,y_test_pred)
 
-                logging.info(f"Train Model Score: {train_model_score}")
-                logging.info(f"Test Model Score: {test_model_score}")
+                logging.info(f"Train Model Score of {list(models.keys())[i]}: {train_model_score}")
+                logging.info(f"Test Model Score of {list(models.keys())[i]}: {test_model_score}")
 
-                logging.info(f"Train Model Classification Report: \n {train_cls_report}")
-                logging.info(f"Test Model Classification Report: \n {test_cls_report}")
+                logging.info(f"Train Model Classification Report of {list(models.keys())[i]}: \n {train_cls_report}")
+                logging.info(f"Test Model Classification Report of  {list(models.keys())[i]}: \n {test_cls_report}")
 
                 report[list(models.keys())[i]] = test_model_score
                 cls_report_dict[list(models.keys())[i]] = test_cls_report
